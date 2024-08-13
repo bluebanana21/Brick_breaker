@@ -13,6 +13,7 @@ const brickColors = [
   Color(0xff577590),
 ];
 
+//game modifier
 const gameWidth = 820.0;
 const gameHeight = 1600.0;
 const ballRadius = gameWidth * 0.02;
@@ -23,4 +24,4 @@ const brickGutter = gameWidth * 0.015;
 final brickWidth =
     (gameWidth - (brickGutter * (brickColors.length + 1))) / brickColors.length;
 const brickHeight = gameHeight * 0.03;
-const difficultyModifier = 1.1;
+const difficultyModifier = 1.03;

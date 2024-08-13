@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +13,7 @@ import 'config.dart';
 
 enum PlayState { welcome, playing, gameOver, won }
 
+//adds collisions, key inputs and mouse inputs
 class BrickBreaker extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector {
   BrickBreaker()
@@ -20,11 +22,13 @@ class BrickBreaker extends FlameGame
               width: gameWidth, height: gameHeight),
         );
 
+  //score
   final ValueNotifier<int> score = ValueNotifier(0);
   final rand = math.Random();
   double get width => size.x;
   double get height => size.y;
 
+  //states of game
   late PlayState _playState;
   PlayState get playState => _playState;
   set playState(PlayState playState) {
@@ -55,6 +59,7 @@ class BrickBreaker extends FlameGame
   void startGame() {
     if (playState == PlayState.playing) return;
 
+    FlameAudio.play('game-start-6104.mp3');
     world.removeAll(world.children.query<Ball>());
     world.removeAll(world.children.query<Bat>());
     world.removeAll(world.children.query<Brick>());
@@ -94,6 +99,7 @@ class BrickBreaker extends FlameGame
     startGame();
   }
 
+  //keyboard controls
   @override
   KeyEventResult onKeyEvent(
       KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
@@ -105,11 +111,12 @@ class BrickBreaker extends FlameGame
         world.children.query<Bat>().first.moveBy(batStep);
       case LogicalKeyboardKey.space:
       case LogicalKeyboardKey.enter:
-      startGame();
+        startGame();
     }
     return KeyEventResult.handled;
   }
 
+  //background color
   @override
   Color backgroundColor() => const Color(0xfff2e8cf);
 }

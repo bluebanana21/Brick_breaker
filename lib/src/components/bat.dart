@@ -18,8 +18,10 @@ class Bat extends PositionComponent
           children: [RectangleHitbox()],
         );
 
+  //radius of bat
   final Radius cornerRadius;
 
+  //color of bat
   final _paint = Paint()
     ..color = const Color(0xff1e6091)
     ..style = PaintingStyle.fill;
@@ -41,6 +43,7 @@ class Bat extends PositionComponent
     position.x = (position.x + event.localDelta.x).clamp(0, gameWidth);
   }
 
+  //bat movement code
   void moveBy(double dx) {
     add(MoveToEffect(
       Vector2((position.x + dx).clamp(0, gameWidth), position.y),

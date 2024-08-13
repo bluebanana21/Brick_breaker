@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart'; // Add this import
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/effects.dart';
 
@@ -7,6 +10,11 @@ import '../brick_breaker.dart';
 import 'brick.dart';
 import 'bat.dart'; // And this import
 import 'play_area.dart'; // And this one too
+
+int rng() {
+  Random rand = Random();
+  return rand.nextInt(5);
+}
 
 class Ball extends CircleComponent
     with CollisionCallbacks, HasGameReference<BrickBreaker> {
@@ -33,10 +41,12 @@ class Ball extends CircleComponent
     position += velocity * dt;
   }
 
-  @override // Add from here...
+  @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+
+    //wall collisions
     if (other is PlayArea) {
       if (intersectionPoints.first.y <= 0) {
         velocity.y = -velocity.y;
@@ -45,14 +55,17 @@ class Ball extends CircleComponent
       } else if (intersectionPoints.first.x >= game.width) {
         velocity.x = -velocity.x;
       } else if (intersectionPoints.first.y >= game.height) {
+        //death
         add(RemoveEffect(
           delay: 0.35,
           onComplete: () {
             game.playState = PlayState.gameOver;
+            FlameAudio.play('death.wav');
           },
         ));
       }
     } else if (other is Bat) {
+      FlameAudio.play('jump_01.wav');
       velocity.y = -velocity.y;
       velocity.x = velocity.x +
           (position.x - other.position.x) / other.size.x * game.width * 0.3;
@@ -66,7 +79,24 @@ class Ball extends CircleComponent
       } else if (position.x > other.position.x) {
         velocity.x = -velocity.x;
       }
-      velocity.setFrom(velocity*difficultyModifier);
+      switch (rng()) {
+        case 1:
+          FlameAudio.play('jump_02.wav');
+          break;
+        case 2:
+          FlameAudio.play('jump_03.wav');
+          break;
+        case 3:
+          FlameAudio.play('jump_07.wav');
+          break;
+        case 4:
+          FlameAudio.play('jump_08.wav');
+          break;
+        default:
+          FlameAudio.play('jump_09.wav');
+      }
+
+      velocity.setFrom(velocity * difficultyModifier);
     }
   } // To here.
 }
