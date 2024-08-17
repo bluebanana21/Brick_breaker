@@ -6,6 +6,7 @@ import '../brick_breaker.dart';
 import '../config.dart';
 import 'overlay_screen.dart';
 import 'score_card.dart';
+import 'high_score.dart';
 
 class GameApp extends StatefulWidget {
   const GameApp({super.key});
@@ -52,7 +53,10 @@ class _GameAppState extends State<GameApp> {
               child: Center(
                 child: Column(
                   children: [
-                    ScoreCard(score: game.score),
+                    ScoreCard(
+                      score: game.score,
+                    ),
+                    HighScoreCard(highScore: game.highScore),
                     Expanded(
                       child: FittedBox(
                         child: SizedBox(
@@ -61,14 +65,11 @@ class _GameAppState extends State<GameApp> {
                           child: GameWidget(
                             game: game,
                             overlayBuilderMap: {
-                              PlayState.welcome.name: (context, game) => [
-                                    OutlinedButton(
-                                        onPressed: () {}, child: const Text("data"))
-                                  ],
-                              // const OverlayScreen(
-                              //   title: 'TAP TO PLAY',
-                              //   subtitle: 'Use arrow keys or swipe',
-                              // ),
+                              PlayState.welcome.name: (context, game) =>
+                                  const OverlayScreen(
+                                    title: 'TAP TO PLAY',
+                                    subtitle: 'Use arrow keys or swipe',
+                                  ),
                               PlayState.gameOver.name: (context, game) =>
                                   const OverlayScreen(
                                     title: 'G A M E   O V E R',

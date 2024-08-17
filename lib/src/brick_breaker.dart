@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 import 'components/components.dart';
 import 'config.dart';
 
-enum PlayState { welcome, playing, gameOver, won }
+enum PlayState { welcome, playing, gameOver, won, highScore }
 
 //adds collisions, key inputs and mouse inputs
 class BrickBreaker extends FlameGame
@@ -24,6 +24,7 @@ class BrickBreaker extends FlameGame
 
   //score
   final ValueNotifier<int> score = ValueNotifier(0);
+  final ValueNotifier<int> highScore = ValueNotifier(0);
   final rand = math.Random();
   double get width => size.x;
   double get height => size.y;
@@ -36,6 +37,7 @@ class BrickBreaker extends FlameGame
     switch (playState) {
       case PlayState.welcome:
       case PlayState.gameOver:
+      case PlayState.highScore:
       case PlayState.won:
         overlays.add(playState.name);
       case PlayState.playing:
@@ -59,12 +61,17 @@ class BrickBreaker extends FlameGame
   void startGame() {
     if (playState == PlayState.playing) return;
 
-    FlameAudio.play('game-start-6104.mp3');
     world.removeAll(world.children.query<Ball>());
     world.removeAll(world.children.query<Bat>());
     world.removeAll(world.children.query<Brick>());
 
     playState = PlayState.playing;
+    if (score.value > highScore.value) {
+      highScore.value = score.value;
+      FlameAudio.play('Highscore.wav');
+    } else {
+      FlameAudio.play('game-start-6104.mp3');
+    }
     score.value = 0;
 
     world.add(Ball(

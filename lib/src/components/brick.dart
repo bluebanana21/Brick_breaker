@@ -1,3 +1,4 @@
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -29,6 +30,12 @@ class Brick extends RectangleComponent
 
     //adds to score if collision
     game.score.value++;
+    // if (game.score.value >= game.highScore.value) {
+    //   game.highScore.value = game.score.value;
+    // }
+    // if ((game.score.value + 1) == game.highScore.value) {
+    //   FlameAudio.play('Highscore.wav');
+    // }
 
     //win condition
     if (game.world.children.query<Brick>().length == 1) {
