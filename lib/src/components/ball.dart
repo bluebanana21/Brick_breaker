@@ -59,8 +59,13 @@ class Ball extends CircleComponent
         add(RemoveEffect(
           delay: 0.35,
           onComplete: () {
-            game.playState = PlayState.gameOver;
-            FlameAudio.play('death.wav');
+            if (game.score.value > game.highScore.value) {
+              game.playState = PlayState.highScore;
+              FlameAudio.play("Highscore.wav");
+            } else {
+              game.playState = PlayState.gameOver;
+              FlameAudio.play('death.wav');
+            }
           },
         ));
       }

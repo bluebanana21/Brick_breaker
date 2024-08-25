@@ -44,6 +44,7 @@ class BrickBreaker extends FlameGame
         overlays.remove(PlayState.welcome.name);
         overlays.remove(PlayState.gameOver.name);
         overlays.remove(PlayState.won.name);
+        overlays.remove(PlayState.highScore.name);
     }
   }
 
@@ -60,7 +61,7 @@ class BrickBreaker extends FlameGame
 
   void startGame() {
     if (playState == PlayState.playing) return;
-
+    FlameAudio.play('game-start-6104.mp3');
     world.removeAll(world.children.query<Ball>());
     world.removeAll(world.children.query<Bat>());
     world.removeAll(world.children.query<Brick>());
@@ -68,10 +69,8 @@ class BrickBreaker extends FlameGame
     playState = PlayState.playing;
     if (score.value > highScore.value) {
       highScore.value = score.value;
-      FlameAudio.play('Highscore.wav');
-    } else {
-      FlameAudio.play('game-start-6104.mp3');
     }
+
     score.value = 0;
 
     world.add(Ball(

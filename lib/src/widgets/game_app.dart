@@ -1,3 +1,4 @@
+import 'package:confetti/confetti.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +9,37 @@ import 'overlay_screen.dart';
 import 'score_card.dart';
 import 'high_score.dart';
 
+class confettiShow extends State {
+  bool isPlaying = false;
+  final controller = ConfettiController();
+
+  @override
+  void initState() {
+    super.initState;
+
+    controller.play();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          ConfettiWidget(
+            confettiController: controller,
+            shouldLoop: true,
+            blastDirectionality: BlastDirectionality.explosive,
+          )
+        ],
+      );
+}
+
 class GameApp extends StatefulWidget {
   const GameApp({super.key});
 
@@ -17,6 +49,7 @@ class GameApp extends StatefulWidget {
 
 class _GameAppState extends State<GameApp> {
   late final BrickBreaker game;
+  final confettiShow confetti = confettiShow();
 
   @override
   void initState() {
@@ -78,6 +111,11 @@ class _GameAppState extends State<GameApp> {
                               PlayState.won.name: (context, game) =>
                                   const OverlayScreen(
                                     title: 'Y O U   W O N ! ! !',
+                                    subtitle: 'Tap to Play Again',
+                                  ),
+                              PlayState.highScore.name: (context, game) =>
+                                  const OverlayScreen(
+                                    title: '!!! NEW  HIGH  SCORE !!!',
                                     subtitle: 'Tap to Play Again',
                                   ),
                             },
